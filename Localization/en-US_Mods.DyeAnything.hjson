@@ -1,0 +1,78 @@
+# This file will automatically update with entries for new content after a build and reload
+
+Items: {
+	DyeSprayer: {
+		DisplayName: Dye Sprayer
+		Tooltip: ""
+	}
+
+	MagicDyer: {
+		DisplayName: Magic Dyer
+		Tooltip: ""
+	}
+
+	RandomDye: {
+		DisplayName: Random Dye
+		Tooltip: "'ooh shiny'"
+	}
+
+	SuperIntenseRandomDye: {
+		Tooltip: "'might cause autism'"
+		DisplayName: Super Intense Random Dye
+	}
+
+	IntenseRandomDye: {
+		Tooltip: "'significantly more worse than before'"
+		DisplayName: Intense Random Dye
+	}
+}
+
+Projectiles.DyeSprayerProj.DisplayName: Dye Sprayer Proj
+
+Configs: {
+	DyeServerConfig: {
+		DisplayName: Dye Server Config
+
+		SprayerCanDyeProjectile: {
+			Label: Sprayer Can Dye Projectile
+			Tooltip: ""
+		}
+
+		WaterRemoveItemDye: {
+			Label: Water Remove Item Dye
+			Tooltip: ""
+		}
+
+		WaterRemoveNPCDye: {
+			Label: Water Remove NPC Dye
+			Tooltip:
+				'''
+				In real life , your red shirt will not turn white when washed 
+				 do you think it shouldnt be like that ?
+				'''
+		}
+
+		DyeReforges: {
+			Label: Dye Reforges
+			Tooltip:
+				'''
+				A super duper WIP that doesnt even work ATM 
+				 makes each dye have unique properties when used
+				'''
+		}
+	}
+
+	DyeClientConfig: {
+		DyeItemPrefix: {
+			Tooltip: looking good my lady
+			Label: Dye Item Prefix
+		}
+
+		DyeItemDyeDye: {
+			Tooltip: dye item actually display what would it look like
+			Label: Dye Item Dye Dye
+		}
+
+		DisplayName: Dye Client Config
+	}
+}
