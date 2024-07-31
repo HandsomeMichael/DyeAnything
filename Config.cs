@@ -46,6 +46,9 @@ namespace DyeAnything
 		[DefaultValue(false)] 
 		public bool ItemPlayerShader;
 
+		[DefaultValue(false)] 
+		public bool OverlapItemLayer;
+
 		[DefaultValue(true)] 
 		public bool DyeItemDyeDye;
 

@@ -18,6 +18,7 @@ using Terraria.Graphics.Shaders;
 
 namespace DyeAnything
 {
+    // In preparation of shader hack rewrite
 	public class DyeAnything : Mod
 	{
 		// public static Dictionary<int,int> dyeList;
