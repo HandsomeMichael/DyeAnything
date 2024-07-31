@@ -1,5 +1,7 @@
 [ Dyeable Anything ! ] is a mod that allows you to dye projectiles , npcs and items
 
+With this mod , right clicking a dye while holding a weapon in the mouse will dye it
+You can also enable "Dye Prefix" in the config to make it does stuff
 
 This mod adds 3 item :
 
@@ -18,6 +20,11 @@ This mod adds 3 item :
 Note : You can spray npcs and projectile with water gun to remove dye
 
 [ Changelog ]
+
+v2.1
+
+- properly implemented Dye Prefixes
+- fixed configs
 
 v2.0
 

@@ -19,6 +19,9 @@ namespace DyeAnything
         // save the config , this requires reflection though.
         public static void SaveConfig() => typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[1] { Get });
 
+		[DefaultValue(true)] 
+		public bool ProjectileFollowParentDye;
+
         [DefaultValue(true)] 
 		public bool SprayerCanDyeProjectile; 
 
@@ -40,10 +43,16 @@ namespace DyeAnything
         // save the config , this requires reflection though.
         public static void SaveConfig() => typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[1] { Get });
 
+		[DefaultValue(false)] 
+		public bool ItemPlayerShader;
+
 		[DefaultValue(true)] 
 		public bool DyeItemDyeDye;
 
 		[DefaultValue(true)] 
 		public bool DyeItemPrefix;
+
+		[DefaultValue(false)] 
+		public bool Debug;
 	}
 }

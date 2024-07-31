@@ -26,6 +26,20 @@ namespace DyeAnything.Items
         }
     }
 	// uncraftable due to epilepsy
+
+	public class EpilepsyDye : RandomDye
+	{
+		public override string Texture => $"Terraria/Images/Item_{ItemID.AcidDye}";
+        public override void UpdateDye()
+        {
+			timer++;
+			if (timer > 1) 
+			{
+				Item.dye = Main.rand.Next(DyeAnything.dyeList);
+				timer = 0;
+			}
+        }
+    }
 	public class SuperIntenseRandomDye : RandomDye
 	{
 		public override string Texture => $"Terraria/Images/Item_{ItemID.GrimDye}";
@@ -126,7 +140,18 @@ namespace DyeAnything.Items
 			}
 			dyePlayer.dye = player.dye[b].dye;
 		}
-	}
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+				.AddIngredient(ItemID.IronBar,10)
+				.AddIngredient(ItemID.Star,4)
+				.AddTile(TileID.DyeVat)
+				.Register();
+        }
+    }
+
+	
 
 	public class DyeSprayer : ModItem
 	{
@@ -148,7 +173,7 @@ namespace DyeAnything.Items
 		}
 		public override void ModifyTooltips(List<TooltipLine> tooltips) 
 		{
-			string text = (dye == 0 ? "[c/F62B2B:None]": $"[i:{DyeAnything.dyeToItemID[dye]}]");
+			string text = dye == 0 ? "[c/F62B2B:None]": $"[i:{DyeAnything.dyeToItemID[dye]}]";
 			tooltips.Add(new TooltipLine(Mod, "amogus", $"Current dye : {text}"));
 			tooltips.Add(new TooltipLine(Mod, "boom", "'boom boom colorfull'"));
 		}

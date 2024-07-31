@@ -1,3 +1,153 @@
+using System.Collections.Generic;
+using DyeAnything.Utils;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.UI.Chat;
+
+namespace DyeAnything
+{
+    public class DyeReforge : GlobalItem
+    {
+        public static string GetPrefixString(int itemID) 
+        {
+            switch (itemID)
+            {
+                case ItemID.GelDye:return "Slimed in a non lewd way";
+                case ItemID.ReflectiveGoldDye:return "Immersed in gold";
+                // Hardmode i think ??
+                case ItemID.IntenseRainbowDye:return "Gayass";
+                case ItemID.TwilightDye:return "Burn within the twilight";
+                case ItemID.PixieDye: return"Sparkled with fairy minds";
+                case ItemID.ReflectiveDye:return"Immersed with illusion";
+                case ItemID.IntenseBlueFlameDye:return "Pure rage.";
+                // End Game
+                case ItemID.VortexDye:return "Impower guns and bows";
+                case ItemID.SolarDye:return"Sword molted with solar";
+                case ItemID.NebulaDye:return "Duplicates magic power";
+                case ItemID.StardustDye:return "Attracts stars and below";
+                default:
+                    return "";
+            }
+        }
+
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return DyeServerConfig.Get.DyeReforges;
+        }
+
+        public override bool AppliesToEntity(Item entity, bool lateInstantiation) => entity.damage > 0 && entity.dye <= 0;
+
+        public override void Load()
+        {
+            Mod.Logger.Info("Loaded dye reforges modules");
+        }
+
+        public override float UseAnimationMultiplier(Item item, Player player)
+        {
+            return base.UseAnimationMultiplier(item, player);
+        }
+
+        public override float UseSpeedMultiplier(Item item, Player player)
+        {
+            return base.UseSpeedMultiplier(item, player);
+        }
+        public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye && Main.rand.NextBool(1,10))
+                {
+                    if (item.useAmmo == AmmoID.Bullet)
+                    {
+                        Projectile.NewProjectile(source,position,velocity*0.9f,ProjectileID.MoonlordBullet,damage/10,knockback,player.whoAmI,0f);   
+                    }
+                    else if (item.useAmmo == AmmoID.Arrow)
+                    {
+                        Projectile.NewProjectile(source,position,velocity*0.9f,ProjectileID.MoonlordArrow,damage/10,knockback,player.whoAmI,0f);   
+                    }
+                }
+            }
+            return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+        }
+
+        public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                if (DyeAnything.dyeToItemID[dye] == ItemID.SolarDye && Main.rand.NextBool(80,100))
+                {
+                    Projectile.NewProjectile(item.GetSource_FromThis(),target.Bottom,Vector2.Zero,ProjectileID.MolotovFire,10,0f,player.whoAmI,0f);
+                }
+
+                if (DyeAnything.dyeToItemID[dye] == ItemID.SolarDye && Main.rand.NextBool(80,100))
+                {
+
+                }
+            }
+            base.OnHitNPC(item, player, target, hit, damageDone);
+        }
+
+
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                string text = GetPrefixString(DyeAnything.dyeToItemID[dye]) ;
+                if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge",text));
+            }
+        }
+
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+        {
+            if (line.Name == "dyeReforge")
+            {
+                if (DyedItem.TryGetDye(item , out int dye))
+                {
+                    Main.spriteBatch.BeginDyeShader(dye,item,true,true);
+
+                    ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, line.Font, line.Text, new Vector2(line.X, line.Y), Color.White, line.Rotation, line.Origin, line.BaseScale, line.MaxWidth, line.Spread);
+                    
+                    Main.spriteBatch.BeginNormal(true,true);
+
+                    return false;
+                }
+            }
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Very WIP 
 
 // using System.Collections.Generic;

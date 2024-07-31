@@ -25,6 +25,11 @@ Items: {
 		Tooltip: "'significantly more worse than before'"
 		DisplayName: Intense Random Dye
 	}
+
+	EpilepsyDye: {
+		DisplayName: Epilepsy Dye
+		Tooltip: absolute wack
+	}
 }
 
 Projectiles.DyeSprayerProj.DisplayName: Dye Sprayer Proj
@@ -53,12 +58,17 @@ Configs: {
 		}
 
 		DyeReforges: {
-			Label: Dye Reforges
+			Label: Dye Prefixes
 			Tooltip:
 				'''
 				A super duper WIP that doesnt even work ATM 
 				 makes each dye have unique properties when used
 				'''
+		}
+
+		ProjectileFollowParentDye: {
+			Label: Projectile Follow Parent Dye
+			Tooltip: if you know nothing dont touch
 		}
 	}
 
@@ -74,5 +84,15 @@ Configs: {
 		}
 
 		DisplayName: Dye Client Config
+
+		Debug: {
+			Label: Debug
+			Tooltip: DO NOT TOUCH THIS
+		}
+
+		ItemPlayerShader: {
+			Label: Item Player Shader
+			Tooltip: ""
+		}
 	}
 }

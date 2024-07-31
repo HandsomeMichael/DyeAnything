@@ -59,6 +59,8 @@ namespace DyeAnything
         {
             int hasil = orig(spawnSource,X,Y,SpeedX,SpeedY,Type,Damage,KnockBack,Owner,ai0,ai1,ai2);
 
+            if (!DyeServerConfig.Get.ProjectileFollowParentDye) return hasil;
+
             // get from item
             if (hasil >= 0 && spawnSource is IEntitySource_WithStatsFromItem itemSource)
             {
@@ -239,8 +241,24 @@ namespace DyeAnything
         public override bool InstancePerEntity => true;
         protected override bool CloneNewInstances => true;
 
+        public static bool TryGetDye(Item item,out int dyeValue)
+		{
+            dyeValue = 0;
+
+			if (item.TryGetGlobalItem<DyedItem>(out DyedItem dyedItem))
+			{
+                dyeValue = dyedItem.dye;
+                return dyedItem.dye > 0;
+			}
+
+            return false;
+		}
+
+
         public override void Update(Item item, ref float gravity, ref float maxFallSpeed)
         {
+            if (!DyeServerConfig.Get.WaterRemoveItemDye) return;
+            
             // wet item dont deserve love
             if (item.wet) 
             {
@@ -287,7 +305,8 @@ namespace DyeAnything
 
         public override bool PreDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-			if (dye > 0) {spriteBatch.BeginDyeShader(dye,item,true,true);}
+            Entity entityShader = DyeClientConfig.Get.ItemPlayerShader ? Main.LocalPlayer: item;
+			if (dye > 0) {spriteBatch.BeginDyeShader(dye,entityShader,true,true);}
             return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
         }
 
@@ -299,7 +318,8 @@ namespace DyeAnything
 
         public override bool PreDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-			if (dye > 0) {spriteBatch.BeginDyeShader(dye,item,true);}
+            Entity entityShader = DyeClientConfig.Get.ItemPlayerShader ? Main.LocalPlayer: item;
+			if (dye > 0) {spriteBatch.BeginDyeShader(dye,entityShader,true);}
             return base.PreDrawInWorld(item, spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
         }
 
@@ -316,6 +336,12 @@ namespace DyeAnything
         {
             tooltips.Add(new TooltipLine(Mod,"applydye","Hold weapon and right click this to dye it"));
             tooltips.Add(new TooltipLine(Mod,"applydye","Dyed item can be washed using water"));
+
+            if (DyeServerConfig.Get.DyeReforges)
+            {
+                string text = DyeReforge.GetPrefixString(item.type);
+                if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge",text));
+            }
         }
 
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
@@ -345,4 +371,5 @@ namespace DyeAnything
             return false;
         }
     }
+    
 }
