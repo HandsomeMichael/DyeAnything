@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -16,9 +16,15 @@ using Terraria.ID;
 using DyeAnything.Items;
 using Terraria.Graphics.Shaders;
 
+
 namespace DyeAnything
 {
     // In preparation of shader hack rewrite
+
+    // most code in here are adapted
+    // many many appreciation for "gamrguy"to make his 1.3 shaderLib opensource
+    // https://github.com/gamrguy/ShaderLib/tree/master 
+
 	public class DyeAnything : Mod
 	{
 		// public static Dictionary<int,int> dyeList;
@@ -165,7 +171,6 @@ namespace DyeAnything
                 }
             }
         }
-
         // public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         // {
         // }
@@ -306,8 +311,20 @@ namespace DyeAnything
 
         public override bool PreDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
         {
-            Entity entityShader = DyeClientConfig.Get.ItemPlayerShader ? Main.LocalPlayer: item;
-			if (dye > 0) {spriteBatch.BeginDyeShader(dye,entityShader,true,true);}
+			if (dye > 0) 
+            {
+
+                Entity entityShader = DyeClientConfig.Get.ItemPlayerShader ? Main.LocalPlayer: item;
+                
+                DrawData data = new DrawData
+                {
+                    position = position - Main.screenPosition,
+                    scale = new Vector2(scale, scale),
+                    sourceRect = frame,
+                    texture = TextureAssets.Item[item.type].Value
+                };
+                spriteBatch.BeginDyeShader(dye,entityShader,true,true,data);
+            }
             return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
         }
 
@@ -319,8 +336,19 @@ namespace DyeAnything
 
         public override bool PreDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
         {
-            Entity entityShader = DyeClientConfig.Get.ItemPlayerShader ? Main.LocalPlayer: item;
-			if (dye > 0) {spriteBatch.BeginDyeShader(dye,entityShader,true);}
+			if (dye > 0)
+            {
+                Entity entityShader = DyeClientConfig.Get.ItemPlayerShader ? Main.LocalPlayer: item;
+                DrawData data = new DrawData
+                {
+                    position = item.position - Main.screenPosition,
+                    scale = new Vector2(scale, scale),
+                    sourceRect = null,
+                    texture = TextureAssets.Item[item.type].Value
+                };
+
+                spriteBatch.BeginDyeShader(dye,entityShader,true);
+            }
             return base.PreDrawInWorld(item, spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
         }
 
@@ -341,7 +369,7 @@ namespace DyeAnything
             if (DyeServerConfig.Get.DyeReforges)
             {
                 string text = DyeReforge.GetPrefixString(item.type);
-                if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge",text));
+                if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge"," + "+text) { OverrideColor = Color.LightGreen} );
             }
         }
 

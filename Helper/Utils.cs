@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
 using DyeAnything.Items;
+using Terraria.DataStructures;
 
 namespace DyeAnything.Utils
 {
@@ -42,15 +43,35 @@ namespace DyeAnything.Utils
 		/// <param name="entity">The entity that will get shadered</param>
 		/// <param name="end">Wether or not the sprite should be Ended before started.</param>
 		/// <param name="ui">Wether it scaled by ui or zoom.</param>
-		public static void BeginDyeShader(this SpriteBatch spriteBatch,int id, Entity entity, bool end = false,bool ui = false) {
+		public static void BeginDyeShader(this SpriteBatch spriteBatch,int id, Entity entity, bool end = false,bool ui = false,DrawData? drawData = null)
+		{
 			spriteBatch.BeginImmediate(end,ui);
-			GameShaders.Armor.Apply(id, entity, null);
+			GameShaders.Armor.Apply(id, entity, drawData);
 		}
 
 		// im too lazy to replace the implementation
 		public static void BeginDyeShaderByItem(this SpriteBatch spriteBatch,int itemid, Entity entity, bool end = false,bool ui = false) {
 			spriteBatch.BeginImmediate(end,ui);
 			GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(itemid), entity, null);
+		}
+
+		// Turns out we dont need this but i still put it here just in case
+		// Stolen from ShaderLib
+		public static void Restart(this SpriteBatch sb, Matrix scaleMatrix, bool forShader = true, bool worldDraw = true)
+		{
+			Rectangle scissor = sb.GraphicsDevice.ScissorRectangle;
+
+			sb.End();
+			sb.GraphicsDevice.ScissorRectangle = scissor;
+			sb.Begin(
+				forShader ? SpriteSortMode.Immediate : SpriteSortMode.Deferred,
+				BlendState.AlphaBlend,
+				worldDraw ? SamplerState.PointClamp : SamplerState.LinearClamp,
+				sb.GraphicsDevice.DepthStencilState,
+				sb.GraphicsDevice.RasterizerState,
+				null,
+				scaleMatrix
+			);
 		}
 
 		/// <summary>
