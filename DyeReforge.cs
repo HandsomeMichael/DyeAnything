@@ -116,6 +116,7 @@ namespace DyeAnything
                     10,
                     1f,
                     player.whoAmI,
+                    0,
                     target.whoAmI);
                 }
 
