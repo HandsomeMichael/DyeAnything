@@ -1,5 +1,7 @@
 
+using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -53,11 +55,21 @@ namespace DyeAnything.Projectiles
             Projectile.position.Y += 0.5f * (1 - (timer /  maxTimer));
             Projectile.Opacity += 0.1f;
             Projectile.velocity = Projectile.DirectionTo(npc.Center) * 5f;
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(45);
 
             // Projectile.Opacity += 0.1f;
             if (timer > maxTimer) target = -1;
 
         }
+
+        // Origin need to be fixed smh
+
+        // public override bool PreDraw(ref Color lightColor)
+        // {
+        //     var texture = ReLogic.Content.Asset<Texture2D>("ASDSAD");
+        //     Main.EntitySpriteDraw();
+        //     return false;
+        // }
+        
     }
 }

@@ -1,0 +1,66 @@
+Things i wanna do
+
+- Make dye USEFULLL AGAINN AAAAAAAAA
+- Built in ShaderLib
+- Improve terraria performance somehow ( why )
+
+Things i planned
+
+Solar Ability :
+
+- Materialize a sword and stab enemy
+- Stabbed enemies will explode after getting a crit
+
+Vortex Ability :
+
+- Weapon have extra change to shoot out extra super bullets
+- Super bullets have a chance to summon rainy arrows
+
+Stardust Ability :
+
+- Crit attacks built up Supernova Charge, Increasing damage by 10%
+- Getting hit will make it explode and reduce your damage by 20% for 20 seconds
+
+Purple Ability
+
+- Ranged attacks grants blue curse debuff ( no knockback )
+- Melee attacks grants red curse debuff ( increasing knockback )
+- Enemies that has blue and red curse will creates purple explosion ( 100 damage)
+
+Green Ability
+
+- Damage will absolutely randomized but can be 200% effective
+- Crit attacks stop this from happening
+
+Handsy Ability
+
+- Getting hit will disable item for 10 seconds , increase damage by 100%
+
+Bouncer
+
+- Most projectile can bounce
+
+Chloropyte dye
+
+- Reduce damage by 80% but all projectile will be homing
+
+Any Gold dye
+
+- Money impower this weapon by 200% at max
+- You lose 1 copper each second
+
+Any Yellow dye
+
+- Hitting and killing enemies will increase the item sell value
+
+Any Reflective dye
+
+- Damage dealt is reflected by enemy contact damage
+
+Obsidian dye or Burning dye
+
+- Hitting burning enemy increase their debuff by 10s
+
+
+
+

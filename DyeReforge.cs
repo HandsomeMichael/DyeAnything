@@ -12,8 +12,36 @@ using Terraria.UI.Chat;
 
 namespace DyeAnything
 {
+    public class DyeReforgePlayer : ModPlayer
+    {
+    }
     public class DyeReforge : GlobalItem
     {
+        public static void GetRegularStats(int itemID, out float damage, out float crit )
+        {
+            var rand = new Random(itemID);
+
+            damage = 0f;
+            crit = 0f;
+
+            switch (rand.Next(10))
+            {
+                // Improve other nows
+                case 0:
+                    damage = 1f;
+                    crit = -1f;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static string GetRegularPrefix(int itemID)
+        {
+            return "";
+        }
+
         public static string GetPrefixString(int itemID) 
         {
             switch (itemID)
