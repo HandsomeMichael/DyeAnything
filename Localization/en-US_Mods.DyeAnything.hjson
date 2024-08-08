@@ -32,7 +32,10 @@ Items: {
 	}
 }
 
-Projectiles.DyeSprayerProj.DisplayName: Dye Sprayer Proj
+Projectiles: {
+	DyeSprayerProj.DisplayName: Dye Sprayer Proj
+	SolarSword.DisplayName: Solar Sword
+}
 
 Configs: {
 	DyeServerConfig: {
@@ -92,6 +95,11 @@ Configs: {
 
 		ItemPlayerShader: {
 			Label: Item Player Shader
+			Tooltip: ""
+		}
+
+		OverlapItemLayer: {
+			Label: Overlap Item Layer
 			Tooltip: ""
 		}
 	}

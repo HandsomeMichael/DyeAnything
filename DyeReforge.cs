@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using DyeAnything.Projectiles;
 using DyeAnything.Utils;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,8 +12,36 @@ using Terraria.UI.Chat;
 
 namespace DyeAnything
 {
+    public class DyeReforgePlayer : ModPlayer
+    {
+    }
     public class DyeReforge : GlobalItem
     {
+        public static void GetRegularStats(int itemID, out float damage, out float crit )
+        {
+            var rand = new Random(itemID);
+
+            damage = 0f;
+            crit = 0f;
+
+            switch (rand.Next(10))
+            {
+                // Improve other nows
+                case 0:
+                    damage = 1f;
+                    crit = -1f;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static string GetRegularPrefix(int itemID)
+        {
+            return "";
+        }
+
         public static string GetPrefixString(int itemID) 
         {
             switch (itemID)
@@ -24,10 +55,10 @@ namespace DyeAnything
                 case ItemID.ReflectiveDye:return"Immersed with illusion";
                 case ItemID.IntenseBlueFlameDye:return "Pure rage.";
                 // End Game
-                case ItemID.VortexDye:return "Impower guns and bows";
-                case ItemID.SolarDye:return"Sword molted with solar";
-                case ItemID.NebulaDye:return "Duplicates magic power";
-                case ItemID.StardustDye:return "Attracts stars and below";
+                case ItemID.VortexDye:return "Impower range";
+                case ItemID.SolarDye:return"Melting Swords";
+                case ItemID.NebulaDye:return "Magic duplicator";
+                case ItemID.StardustDye:return "Star attractor";
                 default:
                     return "";
             }
@@ -47,27 +78,46 @@ namespace DyeAnything
 
         public override float UseAnimationMultiplier(Item item, Player player)
         {
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye)
+                {
+                    return 0.9f;
+                }
+            }
             return base.UseAnimationMultiplier(item, player);
         }
 
         public override float UseSpeedMultiplier(Item item, Player player)
         {
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye)
+                {
+                    return 0.9f;
+                }
+            }
             return base.UseSpeedMultiplier(item, player);
         }
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (DyedItem.TryGetDye(item , out int dye))
             {
-                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye && Main.rand.NextBool(1,10))
+                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye && Main.rand.NextBool(5,100))
                 {
-                    if (item.useAmmo == AmmoID.Bullet)
+                    for (int i = 0; i < 3; i++)
                     {
-                        Projectile.NewProjectile(source,position,velocity*0.9f,ProjectileID.MoonlordBullet,damage/10,knockback,player.whoAmI,0f);   
+                        SoundEngine.PlaySound(SoundID.Item142);
+                        Projectile.NewProjectile(source,position,velocity.RotatedByRandom(MathHelper.ToRadians(30)),type,damage/10,knockback,player.whoAmI,0f);
                     }
-                    else if (item.useAmmo == AmmoID.Arrow)
-                    {
-                        Projectile.NewProjectile(source,position,velocity*0.9f,ProjectileID.MoonlordArrow,damage/10,knockback,player.whoAmI,0f);   
-                    }
+                    // if (item.useAmmo == AmmoID.Bullet)
+                    // {
+                    //     Projectile.NewProjectile(source,position,velocity*0.9f,ProjectileID.MoonlordBullet,damage/10,knockback,player.whoAmI,0f);   
+                    // }
+                    // else if (item.useAmmo == AmmoID.Arrow)
+                    // {
+                    //     Projectile.NewProjectile(source,position,velocity*0.9f,ProjectileID.MoonlordArrow,damage/10,knockback,player.whoAmI,0f);   
+                    // }
                 }
             }
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
@@ -78,15 +128,26 @@ namespace DyeAnything
 
             if (DyedItem.TryGetDye(item , out int dye))
             {
-                if (DyeAnything.dyeToItemID[dye] == ItemID.SolarDye && Main.rand.NextBool(80,100))
-                {
-                    Projectile.NewProjectile(item.GetSource_FromThis(),target.Bottom,Vector2.Zero,ProjectileID.MolotovFire,10,0f,player.whoAmI,0f);
-                }
-
-                if (DyeAnything.dyeToItemID[dye] == ItemID.SolarDye && Main.rand.NextBool(80,100))
+                // 50% chance to summon a slashing sword
+                if (DyeAnything.dyeToItemID[dye] == ItemID.SolarDye && Main.rand.NextBool(90,100))
                 {
 
+                    const float swordDistance = 100f;
+                    Vector2 pos = target.Center + new Vector2(swordDistance,swordDistance).RotatedByRandom(MathHelper.ToRadians(360));
+
+                    CombatText.NewText(new Rectangle((int)pos.X,(int)pos.Y,0,0),Color.White,"spawns");
+
+                    Projectile.NewProjectile(item.GetSource_FromThis(),
+                    pos,
+                    pos.DirectionTo(target.Center) * 5f,
+                    ModContent.ProjectileType<SolarSword>(),
+                    10,
+                    1f,
+                    player.whoAmI,
+                    0,
+                    target.whoAmI);
                 }
+
             }
             base.OnHitNPC(item, player, target, hit, damageDone);
         }

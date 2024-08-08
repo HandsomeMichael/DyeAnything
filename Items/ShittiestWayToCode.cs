@@ -47,7 +47,15 @@ namespace DyeAnything.Items
 			{
 				DrawData cloneData = drawinfo.DrawDataCache[i];
 				cloneData.shader = shaderNum;
-				drawinfo.DrawDataCache.Add(cloneData);
+
+				if (DyeClientConfig.Get.OverlapItemLayer)
+				{
+					drawinfo.DrawDataCache.Add(cloneData);
+				}
+				else 
+				{
+					drawinfo.DrawDataCache[i] = cloneData;
+				}
 			}
         }
 
