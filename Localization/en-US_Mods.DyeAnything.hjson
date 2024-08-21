@@ -43,11 +43,11 @@ Configs: {
 
 		SprayerCanDyeProjectile: {
 			Label: Sprayer Can Dye Projectile
-			Tooltip: 
-			'''
-			Allow Sprayer to spray nearby Projectiles
-			Disable if you having performance issue ( maybe increase fps by 0.01 % )
-			'''
+			Tooltip:
+				'''
+				Allow Sprayer to spray nearby Projectiles
+				Disable if you having performance issue ( maybe increase fps by 0.01 % )
+				'''
 		}
 
 		WaterRemoveItemDye: {
@@ -77,6 +77,15 @@ Configs: {
 			Label: Projectile Follow Parent Dye
 			Tooltip: Projectile follow its NPC , Item or other Projectile Original Dye
 		}
+
+		EnemyFunStuff: {
+			Label: Enemy Fun Stuff
+			Tooltip:
+			'''
+			Honestly im bored
+			Enable this if ur bored
+			'''
+		}
 	}
 
 	DyeClientConfig: {
@@ -100,37 +109,28 @@ Configs: {
 		ItemPlayerShader: {
 			Label: Item Player Shader
 			Tooltip:
-			'''
-			Item Shader uses Player as entity parameter
-			Perhaps fix your problem no ??
-			'''
+				'''
+				Item Shader uses Player as entity parameter
+				Perhaps fix your problem no ??
+				'''
 		}
 
 		OverlapItemLayer: {
 			Label: Overlap Item Layer
-			Tooltip: 
-			'''
-			Overlap item layer instead of Replacing It
-			Maybe some mods are doing funny stuff in item layer idk.
-			'''
+			Tooltip:
+				'''
+				Overlap item layer instead of Replacing It
+				Maybe some mods are doing funny stuff in item layer idk.
+				'''
 		}
 
 		ProjectileDustPatch: {
 			Label: Projectile Dust Patch
-			Tooltip: 
-			'''
-			Dust follow its projectile dye
-			Can be disabled if you having unmatched dust color
-			'''
-		}
-
-		EnemyFunStuff: {
-			Label: Enemy Do Funny Stuff
-			Tooltip: 
-			'''
-			Honestly im bored
-			Enable this if ur bored
-			'''
+			Tooltip:
+				'''
+				Dust follow its projectile dye
+				Can be disabled if you having unmatched dust color
+				'''
 		}
 	}
 }

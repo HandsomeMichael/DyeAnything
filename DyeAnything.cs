@@ -135,7 +135,7 @@ namespace DyeAnything
 
                     if (DyeServerConfig.Get.DyeReforges)
                     {
-                        DyeReforge.LoadItem(this,item);
+                        DyeReforge.LoadItem(this,item,i);
                     }
 				}
 			}
@@ -399,6 +399,7 @@ namespace DyeAnything
             {
                 string text = DyeReforge.GetPrefixString(item.type);
                 if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge"," + "+text) { OverrideColor = Color.LightGreen} );
+                tooltips.Add(new TooltipLine(Mod,"dyeCommonPrefix",DyeReforge.playerStats[item.dye].GetStatText(item)));
             }
         }
 

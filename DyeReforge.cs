@@ -25,7 +25,19 @@ namespace DyeAnything
             public float speed;
             public int regen;
 
+
             public int defense;
+
+            public int manaCost;
+
+            public float damage;
+
+            public float wepSpeed;
+
+            public float coinLuck;
+
+            public float lifeSteal;
+
 
             public void ApplyStat(Player player)
             {
@@ -33,6 +45,17 @@ namespace DyeAnything
                 player.moveSpeed += speed;
                 player.statLifeMax2 += maxLife;
                 player.statDefense += defense;
+                player.manaCost += manaCost;
+                player.coinLuck += coinLuck;
+                player.lifeSteal += lifeSteal;
+            }
+
+            public void ApplyDamage(Item item,ref StatModifier statDamage)
+            {
+                if (damage != 0)
+                {
+                    statDamage *= 1f + damage;
+                }
             }
 
             string FormatPercent(float perc)
@@ -40,14 +63,22 @@ namespace DyeAnything
                 return perc * 100f + " %";
             }
 
-            public string GetStatText()
+            public string GetStatText(Item item)
             {
                 string finalText = "";
 
                 if (maxLife != 0) finalText += maxLife > 0 ? "Increased Life By "+maxLife+"\n" : "Decreased Life By "+maxLife+"\n";
-                if (speed != 0) finalText += speed > 0 ? "Increased Speed By "+FormatPercent(speed)+"\n" : "Decreased Speed By "+FormatPercent(speed)+"\n";
+                if (speed != 0) finalText += speed > 0 ? "Increased Movement Speed By "+FormatPercent(speed)+"\n" : "Decreased Movement Speed By "+FormatPercent(speed)+"\n";
                 if (regen != 0) finalText += regen > 0 ? "Increased Regen By "+regen+"\n" : "Decreased Regen By "+regen+"\n";
                 if (defense != 0) finalText += defense > 0 ? "Increased Defense By "+defense+"\n" : "Decreased Defense By "+defense+"\n";
+                if (damage != 0) finalText += damage > 0 ? "Increased Damage By "+FormatPercent(damage)+"\n" : "Decreased Damage By "+FormatPercent(damage)+"\n";
+                if (coinLuck != 0) finalText += coinLuck > 0 ? "Increased Coin Luck By "+FormatPercent(coinLuck)+"\n" : "Decreased Coin Luck By "+FormatPercent(coinLuck)+"\n";
+                if (lifeSteal != 0) finalText += "Can life leach by "+FormatPercent(lifeSteal);
+
+                if (item.mana > 0)
+                {
+                    if (manaCost != 0) finalText += manaCost > 0 ? "Increased Mana Cost By "+manaCost+"\n" : "Decreased Mana Cost By "+manaCost+"\n";
+                }
 
                 return finalText == "" ? "No Extra Quality Found" : finalText ;
             }
@@ -78,7 +109,7 @@ namespace DyeAnything
             oneTimeUseRandomWow = null;
         }
         
-        public static void LoadItem(Mod Mod, Item item)
+        public static void LoadItem(Mod Mod, Item item,int itemId)
         {
             var stat = new DyeStatIncrease();
 
@@ -89,10 +120,14 @@ namespace DyeAnything
             // Good
             switch (ran.Next(8))
             {
-                case 0: stat.speed = (float)ran.Next(0,25) / 100f; break;
+                case 0: stat.speed = (float)ran.Next(0,20) / 100f; break;
                 case 1: stat.regen = ran.Next(1,10); break;
                 case 2: stat.maxLife = ran.Next(10,50); break;
                 case 3: stat.defense = ran.Next(1,8); break;
+                case 4: stat.manaCost = ran.Next(5,20); break;
+                case 5: stat.damage = (float)ran.Next(5,15) / 100f; break;
+                case 6: stat.coinLuck = (float)ran.Next(1,10) / 100f; break;
+                case 7: stat.lifeSteal = (float)ran.Next(1,5) / 100f; break;
                 default:break;
             }
 
@@ -103,12 +138,14 @@ namespace DyeAnything
             {
                 case 0: stat.speed -= (float)ran.Next(0,10) / 100f; break;
                 case 1: stat.regen -= ran.Next(1,6); break;
-                case 2: stat.maxLife -= ran.Next(5,20); break;
+                case 2: stat.maxLife -= ran.Next(5,10); break;
                 case 3: stat.defense -= ran.Next(1,4); break;
+                case 4: stat.manaCost -= ran.Next(5,10); break;
+                case 5: stat.damage -= (float)ran.Next(2,10) / 100f; break;
                 default:break;
             }
 
-            Mod.Logger.Info("Adding Stat "+item.type+" // "+item.dye+ " // "+ item.Name);
+            Mod.Logger.Info("Adding Stat "+itemId+" // "+item.dye+ " // "+ item.Name);
 
             // playerStats.Add(item.dye,stat);
             playerStats[item.dye] = stat;
@@ -204,6 +241,14 @@ namespace DyeAnything
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
 
+        public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage)
+        {
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                playerStats[dye].ApplyDamage(item,ref damage);   
+            }
+        }
+
         public override void ModifyHitNPC(Item item, Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             
@@ -257,7 +302,7 @@ namespace DyeAnything
                 string text = GetPrefixString(DyeAnything.dyeToItemID[dye]) ;
                 if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge",text));
 
-                tooltips.Add(new TooltipLine(Mod,"dyeCommonPrefix",playerStats[dye].GetStatText()));
+                tooltips.Add(new TooltipLine(Mod,"dyeCommonPrefix",playerStats[dye].GetStatText(item)));
             }
         }
 
