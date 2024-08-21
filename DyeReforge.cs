@@ -12,29 +12,112 @@ using Terraria.UI.Chat;
 
 namespace DyeAnything
 {
-    public class DyeReforgePlayer : ModPlayer
-    {
-    }
     public class DyeReforge : GlobalItem
     {
-        public static void GetRegularStats(int itemID, out float damage, out float crit )
+
+        // as you now im a lazy and really complicated child , i want to make shit automatic
+
+        internal struct DyeStatIncrease
         {
-            var rand = new Random(itemID);
+            public int maxLife;
+            public float speed;
+            public int regen;
 
-            damage = 0f;
-            crit = 0f;
+            public int defense;
 
-            switch (rand.Next(10))
+            public void ApplyStat(Player player)
             {
-                // Improve other nows
-                case 0:
-                    damage = 1f;
-                    crit = -1f;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
+                player.lifeRegen += regen;
+                player.moveSpeed += speed;
+                player.statLifeMax2 += maxLife;
+                player.statDefense += defense;
             }
+
+            string FormatPercent(float perc)
+            {
+                return perc * 100f + " %";
+            }
+
+            public string GetStatText()
+            {
+                string finalText = "";
+
+                if (maxLife != 0) finalText += maxLife > 0 ? "Increased Life By "+maxLife+"\n" : "Decreased Life By "+maxLife+"\n";
+                if (speed != 0) finalText += speed > 0 ? "Increased Speed By "+FormatPercent(speed)+"\n" : "Decreased Speed By "+FormatPercent(speed)+"\n";
+                if (regen != 0) finalText += regen > 0 ? "Increased Regen By "+regen+"\n" : "Decreased Regen By "+regen+"\n";
+                if (defense != 0) finalText += defense > 0 ? "Increased Defense By "+defense+"\n" : "Decreased Defense By "+defense+"\n";
+
+                return finalText == "" ? "No Quality Found" : finalText ;
+            }
+
+        }
+
+        internal static Dictionary<int,DyeStatIncrease> playerStats;
+        static internal Random oneTimeUseRandomWow;
+
+        public override void Unload()
+        {
+            playerStats = null;
+        }
+
+        public static void PreSetup(Mod Mod)
+        {
+
+            Mod.Logger.Info("Loading dye common reforges modules");
+
+            playerStats = new Dictionary<int, DyeStatIncrease>();
+            oneTimeUseRandomWow = new Random("The seed is fuck you".GetHashCode());
+
+            Mod.Logger.Info("Setupping loop");
+        }
+
+        public static void PostSetup(Mod Mod)
+        {
+            oneTimeUseRandomWow = null;
+        }
+        
+        public static void LoadItem(Mod Mod, Item item)
+        {
+            var stat = new DyeStatIncrease();
+
+            Mod.Logger.Info("Adding Good Prefixes for "+item.Name);
+
+            var ran = oneTimeUseRandomWow;
+
+            // Good
+            switch (ran.Next(8))
+            {
+                case 0: stat.speed = (float)ran.Next(0,25) / 100f; break;
+                case 1: stat.regen = ran.Next(1,10); break;
+                case 2: stat.maxLife = ran.Next(10,50); break;
+                case 3: stat.defense = ran.Next(1,8); break;
+                default:break;
+            }
+
+            Mod.Logger.Info("Adding Bad Prefixes for "+item.Name);
+
+            // Bad
+            switch (ran.Next(8))
+            {
+                case 0: stat.speed -= (float)ran.Next(0,10) / 100f; break;
+                case 1: stat.regen -= ran.Next(1,6); break;
+                case 2: stat.maxLife -= ran.Next(5,20); break;
+                case 3: stat.defense -= ran.Next(1,4); break;
+                default:break;
+            }
+
+            Mod.Logger.Info("Adding Stat "+item.type+" // "+item.dye+ " // "+ item.Name);
+
+            // playerStats.Add(item.dye,stat);
+            playerStats[item.dye] = stat;
+        }
+
+        public override void HoldItem(Item item, Player player)
+        {
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                playerStats[dye].ApplyStat(player);
+            }   
         }
 
         public static string GetRegularPrefix(int itemID)
@@ -49,6 +132,7 @@ namespace DyeAnything
                 case ItemID.GelDye:return "Slimed in a non lewd way";
                 case ItemID.ReflectiveGoldDye:return "Immersed in gold";
                 // Hardmode i think ??
+                case ItemID.GreenDye:return "Lets gamble.";
                 case ItemID.IntenseRainbowDye:return "Gayass";
                 case ItemID.TwilightDye:return "Burn within the twilight";
                 case ItemID.PixieDye: return"Sparkled with fairy minds";
@@ -60,7 +144,7 @@ namespace DyeAnything
                 case ItemID.NebulaDye:return "Magic duplicator";
                 case ItemID.StardustDye:return "Star attractor";
                 default:
-                    return "";
+                    return "Non Special Dye";
             }
         }
 
@@ -70,11 +154,6 @@ namespace DyeAnything
         }
 
         public override bool AppliesToEntity(Item entity, bool lateInstantiation) => entity.damage > 0 && entity.dye <= 0;
-
-        public override void Load()
-        {
-            Mod.Logger.Info("Loaded dye reforges modules");
-        }
 
         public override float UseAnimationMultiplier(Item item, Player player)
         {
@@ -123,12 +202,27 @@ namespace DyeAnything
             return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
         }
 
+        public override void ModifyHitNPC(Item item, Player player, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            
+            if (DyedItem.TryGetDye(item , out int dye))
+            {
+                
+                if (DyeAnything.dyeToItemID[dye] == ItemID.GreenDye)
+                {
+                    modifiers.FinalDamage *= Main.rand.NextFloat()*2f;
+                }
+            }
+            base.ModifyHitNPC(item, player, target, ref modifiers);
+        }
+
         public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
 
             if (DyedItem.TryGetDye(item , out int dye))
             {
                 // 50% chance to summon a slashing sword
+
                 if (DyeAnything.dyeToItemID[dye] == ItemID.SolarDye && Main.rand.NextBool(90,100))
                 {
 
@@ -160,6 +254,8 @@ namespace DyeAnything
             {
                 string text = GetPrefixString(DyeAnything.dyeToItemID[dye]) ;
                 if (text != "") tooltips.Add(new TooltipLine(Mod,"dyeReforge",text));
+
+                tooltips.Add(new TooltipLine(Mod,"dyeCommonPrefix",playerStats[dye].GetStatText()));
             }
         }
 

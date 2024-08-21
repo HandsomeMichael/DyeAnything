@@ -102,5 +102,10 @@ Configs: {
 			Label: Overlap Item Layer
 			Tooltip: ""
 		}
+
+		ProjectileDustPatch: {
+			Label: Projectile Dust Patch
+			Tooltip: ""
+		}
 	}
 }

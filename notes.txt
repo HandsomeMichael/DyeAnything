@@ -19,7 +19,8 @@ Vortex Ability :
 Stardust Ability :
 
 - Crit attacks built up Supernova Charge, Increasing damage by 10%
-- Getting hit will make it explode and reduce your damage by 20% for 20 seconds
+- Supernova Charge decrease over time
+- Getting hit will make it explode and reduce your damage by 30% for 20 seconds
 
 Purple Ability
 

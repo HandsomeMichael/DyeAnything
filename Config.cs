@@ -31,6 +31,7 @@ namespace DyeAnything
 		[DefaultValue(true)] 
 		public bool WaterRemoveNPCDye;
 
+
 		[DefaultValue(true)] 
 		public bool DyeReforges;
 	}
@@ -43,6 +44,9 @@ namespace DyeAnything
         // save the config , this requires reflection though.
         public static void SaveConfig() => typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[1] { Get });
 
+		[DefaultValue(true)] 
+		public bool ProjectileDustPatch;
+		
 		[DefaultValue(false)] 
 		public bool ItemPlayerShader;
 

@@ -117,6 +117,12 @@ namespace DyeAnything
 
         public override void PostSetupContent() 
 		{
+
+            if (DyeServerConfig.Get.DyeReforges)
+            {
+                DyeReforge.PreSetup(this);
+            }
+
 			for (int i = 0; i < ItemLoader.ItemCount; i++)
 			{
 				Item item = new Item();
@@ -126,8 +132,18 @@ namespace DyeAnything
 					// dyeList.Add(i,item.dye);
 					dyeList.Add(item.dye);
                     dyeToItemID[item.dye] = i;
+
+                    if (DyeServerConfig.Get.DyeReforges)
+                    {
+                        DyeReforge.LoadItem(this,item);
+                    }
 				}
 			}
+
+            if (DyeServerConfig.Get.DyeReforges)
+            {
+                DyeReforge.PostSetup(this);
+            }
 		}
 
         private int ShaderPatch(On_Main.orig_GetProjectileDesiredShader orig, Projectile proj)
@@ -225,6 +241,19 @@ namespace DyeAnything
 				}
 			}
         }
+
+        public static bool TryGetDye(Projectile projectile,out int dyeValue)
+		{
+            dyeValue = 0;
+
+			if (projectile.TryGetGlobalProjectile<DyedProjectile>(out DyedProjectile dyedProjectile))
+			{
+                dyeValue = dyedProjectile.dye;
+                return dyedProjectile.dye > 0;
+			}
+
+            return false;
+		}
 
         // public override bool PreDraw(Projectile projectile, ref Color lightColor)
         // {
