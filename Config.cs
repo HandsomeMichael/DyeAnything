@@ -32,8 +32,11 @@ namespace DyeAnything
 		public bool WaterRemoveNPCDye;
 
 
-		[DefaultValue(true)] 
+		[DefaultValue(false)] 
 		public bool DyeReforges;
+
+		[DefaultValue(false)] 
+		public bool EnemyFunStuff;
 	}
 
 	public class DyeClientConfig : ModConfig

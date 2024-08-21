@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using DyeAnything.Projectiles;
 using DyeAnything.Utils;
 using Microsoft.Xna.Framework;
@@ -19,6 +20,7 @@ namespace DyeAnything
 
         internal struct DyeStatIncrease
         {
+
             public int maxLife;
             public float speed;
             public int regen;
@@ -47,7 +49,7 @@ namespace DyeAnything
                 if (regen != 0) finalText += regen > 0 ? "Increased Regen By "+regen+"\n" : "Decreased Regen By "+regen+"\n";
                 if (defense != 0) finalText += defense > 0 ? "Increased Defense By "+defense+"\n" : "Decreased Defense By "+defense+"\n";
 
-                return finalText == "" ? "No Quality Found" : finalText ;
+                return finalText == "" ? "No Extra Quality Found" : finalText ;
             }
 
         }

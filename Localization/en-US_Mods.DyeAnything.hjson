@@ -43,12 +43,16 @@ Configs: {
 
 		SprayerCanDyeProjectile: {
 			Label: Sprayer Can Dye Projectile
-			Tooltip: ""
+			Tooltip: 
+			'''
+			Allow Sprayer to spray nearby Projectiles
+			Disable if you having performance issue ( maybe increase fps by 0.01 % )
+			'''
 		}
 
 		WaterRemoveItemDye: {
 			Label: Water Remove Item Dye
-			Tooltip: ""
+			Tooltip: "'Blud , Your dye are cheap'"
 		}
 
 		WaterRemoveNPCDye: {
@@ -61,17 +65,17 @@ Configs: {
 		}
 
 		DyeReforges: {
-			Label: Dye Prefixes
+			Label: Dye Custom Effect
 			Tooltip:
 				'''
-				A super duper WIP that doesnt even work ATM 
-				 makes each dye have unique properties when used
+				Dyed item will have unique custom effects
+				This may or may not benefits player so by default its disabled
 				'''
 		}
 
 		ProjectileFollowParentDye: {
 			Label: Projectile Follow Parent Dye
-			Tooltip: if you know nothing dont touch
+			Tooltip: Projectile follow its NPC , Item or other Projectile Original Dye
 		}
 	}
 
@@ -90,22 +94,43 @@ Configs: {
 
 		Debug: {
 			Label: Debug
-			Tooltip: DO NOT TOUCH THIS
+			Tooltip: For debugging purposes
 		}
 
 		ItemPlayerShader: {
 			Label: Item Player Shader
-			Tooltip: ""
+			Tooltip:
+			'''
+			Item Shader uses Player as entity parameter
+			Perhaps fix your problem no ??
+			'''
 		}
 
 		OverlapItemLayer: {
 			Label: Overlap Item Layer
-			Tooltip: ""
+			Tooltip: 
+			'''
+			Overlap item layer instead of Replacing It
+			Maybe some mods are doing funny stuff in item layer idk.
+			'''
 		}
 
 		ProjectileDustPatch: {
 			Label: Projectile Dust Patch
-			Tooltip: ""
+			Tooltip: 
+			'''
+			Dust follow its projectile dye
+			Can be disabled if you having unmatched dust color
+			'''
+		}
+
+		EnemyFunStuff: {
+			Label: Enemy Do Funny Stuff
+			Tooltip: 
+			'''
+			Honestly im bored
+			Enable this if ur bored
+			'''
 		}
 	}
 }
