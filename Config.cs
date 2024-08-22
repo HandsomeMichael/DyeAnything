@@ -59,8 +59,8 @@ namespace DyeAnything
 		[DefaultValue(false)] 
 		public bool OverlapItemLayer;
 
-		[DefaultValue(true)] 
-		public bool DyeItemDyeDye;
+		// [DefaultValue(true)] 
+		// public bool DyeItemDyeDye;
 
 		[DefaultValue(true)] 
 		public bool DyeItemPrefix;

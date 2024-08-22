@@ -84,6 +84,15 @@ namespace DyeAnything
                 }
             }
 
+            // We could check player ammo for this but im lazy ahh mf
+            
+            // if (hasil >= 0 && spawnSource is EntitySource_ItemUse_WithAmmo ammoSource)
+            // {
+            //     if (ammoSource.AmmoItemIdUsed != 0) 
+            //     {
+            //     }
+            // }
+
             // get from parents
             if (hasil >= 0 && spawnSource is EntitySource_Parent entitySource ) 
             {
