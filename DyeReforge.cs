@@ -25,7 +25,6 @@ namespace DyeAnything
             public float speed;
             public int regen;
 
-
             public int defense;
 
             public int manaCost;
@@ -74,6 +73,7 @@ namespace DyeAnything
                 if (damage != 0) finalText += damage > 0 ? "Increased Damage By "+FormatPercent(damage)+"\n" : "Decreased Damage By "+FormatPercent(damage)+"\n";
                 if (coinLuck != 0) finalText += coinLuck > 0 ? "Increased Coin Luck By "+FormatPercent(coinLuck)+"\n" : "Decreased Coin Luck By "+FormatPercent(coinLuck)+"\n";
                 if (lifeSteal != 0) finalText += "Can life leach by "+FormatPercent(lifeSteal);
+                if (wepSpeed != 0) finalText += wepSpeed > 0 ? "Increased Attack Speed By "+FormatPercent(wepSpeed)+"\n" : "Decreased Attack Speed By "+FormatPercent(wepSpeed)+"\n";
 
                 if (item.mana > 0)
                 {
@@ -118,7 +118,7 @@ namespace DyeAnything
             var ran = oneTimeUseRandomWow;
 
             // Good
-            switch (ran.Next(8))
+            switch (ran.Next(9))
             {
                 case 0: stat.speed = (float)ran.Next(0,20) / 100f; break;
                 case 1: stat.regen = ran.Next(1,10); break;
@@ -128,6 +128,7 @@ namespace DyeAnything
                 case 5: stat.damage = (float)ran.Next(5,15) / 100f; break;
                 case 6: stat.coinLuck = (float)ran.Next(1,10) / 100f; break;
                 case 7: stat.lifeSteal = (float)ran.Next(1,5) / 100f; break;
+                case 8: stat.wepSpeed = (float)ran.Next(1,10) / 100f; break;
                 default:break;
             }
 
@@ -142,6 +143,8 @@ namespace DyeAnything
                 case 3: stat.defense -= ran.Next(1,4); break;
                 case 4: stat.manaCost -= ran.Next(5,10); break;
                 case 5: stat.damage -= (float)ran.Next(2,10) / 100f; break;
+                case 6: stat.coinLuck -= (float)ran.Next(1,10) / 100f; break;
+                case 7: stat.wepSpeed -= (float)ran.Next(1,15) / 100f; break;
                 default:break;
             }
 
@@ -196,26 +199,17 @@ namespace DyeAnything
 
         public override float UseAnimationMultiplier(Item item, Player player)
         {
+            float mult = base.UseAnimationMultiplier(item, player);
             if (DyedItem.TryGetDye(item , out int dye))
             {
-                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye)
-                {
-                    return 0.9f;
-                }
+                mult += playerStats[dye].wepSpeed;
             }
-            return base.UseAnimationMultiplier(item, player);
+            return mult;
         }
 
         public override float UseSpeedMultiplier(Item item, Player player)
         {
-            if (DyedItem.TryGetDye(item , out int dye))
-            {
-                if (DyeAnything.dyeToItemID[dye] == ItemID.VortexDye)
-                {
-                    return 0.9f;
-                }
-            }
-            return base.UseSpeedMultiplier(item, player);
+            return UseAnimationMultiplier(item,player);
         }
         public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

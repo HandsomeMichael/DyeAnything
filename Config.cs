@@ -36,6 +36,9 @@ namespace DyeAnything
 		public bool DyeReforges;
 
 		[DefaultValue(false)] 
+		public bool FailSaveLoad;
+
+		[DefaultValue(false)] 
 		public bool EnemyFunStuff;
 	}
 

@@ -49,6 +49,7 @@ namespace DyeAnything
         {
             dyeList = null;
             dyeToItemID = null;
+            dyeToDyeName = null;
             Terraria.On_Main.GetProjectileDesiredShader -= ShaderPatch;
             Terraria.On_Projectile.NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float -= ProjPatch;
             // Terraria.DataStructures.On_PlayerDrawLayers.DrawPlayer_27_HeldItem -= HeldItemPatch;
@@ -127,6 +128,11 @@ namespace DyeAnything
 			{
 				Item item = new Item();
 				item.SetDefaults(i);
+
+                if (item.type == ItemID.UnicornWispDye)
+                {
+
+                }
 				if (item.dye > 0)
 				{
 					// dyeList.Add(i,item.dye);
@@ -135,6 +141,9 @@ namespace DyeAnything
 
                     if (DyeServerConfig.Get.DyeReforges)
                     {
+
+                        // very very very very weird bug
+
                         DyeReforge.LoadItem(this,item,i);
                     }
 				}
@@ -204,11 +213,39 @@ namespace DyeAnything
         // do we need to sync this on server ?
         public override void SaveData(NPC npc, TagCompound tag)
         {
-            tag.Add("dye",dye);
+
+            // Wow slight performance wow
+
+            if (!DyeServerConfig.Get.FailSaveLoad)
+            {
+                tag.Add("dye",dye);
+                return;
+            }
+
+            // Only save saved dye
+
+            if (DyeAnything.dyeList.Contains(dye)) 
+            {
+                tag.Add("dye",dye);
+            }
+            else 
+            {
+                Mod.Logger.Warn("Missing dye mod , refusing to save");
+            }
         }
+
         public override void LoadData(NPC npc, TagCompound tag)
         {
-            dye = tag.GetInt("dye");
+
+            dye = tag.GetAsInt("dye");
+            if (!DyeServerConfig.Get.FailSaveLoad) return;
+
+            if (!DyeAnything.dyeList.Contains(dye))
+            {
+                // use the first dye
+                dye = DyeAnything.dyeList[1];
+                Mod.Logger.Warn("Missing dye mod , altering dye");
+            }
         }
 
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -322,14 +359,42 @@ namespace DyeAnything
             dye = reader.ReadInt32();
         }
 
+        
         public override void SaveData(Item item, TagCompound tag)
         {
-            tag.Add("dye",dye);
+
+            // Wow slight performance wow
+
+            if (!DyeServerConfig.Get.FailSaveLoad)
+            {
+                tag.Add("dye",dye);
+                return;
+            }
+
+            // Only save saved dye
+
+            if (DyeAnything.dyeList.Contains(dye)) 
+            {
+                tag.Add("dye",dye);
+            }
+            else 
+            {
+                Mod.Logger.Warn("Missing dye mod , refusing to save");
+            }
         }
 
         public override void LoadData(Item item, TagCompound tag)
         {
+
             dye = tag.GetAsInt("dye");
+            if (!DyeServerConfig.Get.FailSaveLoad) return;
+
+            if (!DyeAnything.dyeList.Contains(dye))
+            {
+                // use the first dye
+                dye = DyeAnything.dyeList[1];
+                Mod.Logger.Warn("Missing dye mod , altering dye");
+            }
         }
 
         // only apply to weapons
@@ -361,6 +426,9 @@ namespace DyeAnything
         {
             base.PostDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
 			if (dye > 0) {spriteBatch.BeginNormal(true,true);}
+
+            if (DyeClientConfig.Get.Debug)
+            ChatManager.DrawColorCodedString(spriteBatch,FontAssets.MouseText.Value,":"+dye,position,Color.White,0f,Vector2.One,Vector2.One);
         }
 
         public override bool PreDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI)
@@ -383,6 +451,7 @@ namespace DyeAnything
 
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
+            
             base.PostDrawInWorld(item, spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
 			if (dye > 0) {spriteBatch.BeginNormal(true);}
         }
@@ -419,6 +488,12 @@ namespace DyeAnything
                     SoundEngine.PlaySound(SoundID.Splash);
 				}
 			}
+        }
+
+        public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
+        {
+            if (DyeClientConfig.Get.Debug)
+            ChatManager.DrawColorCodedString(spriteBatch,FontAssets.MouseText.Value,item.type+" / "+item.dye,position,Color.White,0f,Vector2.One,Vector2.One);
         }
 
         public override bool CanRightClick(Item item)

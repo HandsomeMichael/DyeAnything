@@ -81,9 +81,18 @@ Configs: {
 		EnemyFunStuff: {
 			Label: Enemy Fun Stuff
 			Tooltip:
+				'''
+				Honestly im bored
+				Enable this if ur bored
+				'''
+		}
+
+		FailSaveLoad: {
+			Label: Fail save plan 
+			Tooltip: 
 			'''
-			Honestly im bored
-			Enable this if ur bored
+			A technical support for unloaded dye
+			Disable this if you want a slight increase in load time somehow
 			'''
 		}
 	}
