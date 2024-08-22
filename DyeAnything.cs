@@ -474,7 +474,8 @@ namespace DyeAnything
 
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
-            return entity.dye > 0;
+            // THE AMOUNT OF SHIT THIS THING CAUSE TO BUG OUT THE GAME IS HUGE
+            return entity.dye > 0 && entity.type != ItemID.ColorOnlyDye;
         }
 
         public override void RightClick(Item item, Player player)

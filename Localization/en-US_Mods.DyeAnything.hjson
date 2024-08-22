@@ -88,12 +88,12 @@ Configs: {
 		}
 
 		FailSaveLoad: {
-			Label: Fail save plan 
-			Tooltip: 
-			'''
-			A technical support for unloaded dye
-			Disable this if you want a slight increase in load time somehow
-			'''
+			Label: Fail save plan
+			Tooltip:
+				'''
+				A technical support for unloaded dye
+				Disable this if you want a slight increase in load time somehow
+				'''
 		}
 	}
 
