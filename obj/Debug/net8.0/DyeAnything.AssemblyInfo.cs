@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DyeAnything")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f40e7cef3eb5132ff476ff8ef6e3c6448df6d35c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+056f40e8c9a61f9ae981abc47615a67aba14177d")]
 [assembly: System.Reflection.AssemblyProductAttribute("DyeAnything")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DyeAnything")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
