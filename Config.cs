@@ -31,13 +31,19 @@ namespace DyeAnything
 		[DefaultValue(true)] 
 		public bool WaterRemoveNPCDye;
 
+		[ReloadRequired]
+		[DefaultValue(false)] 
+		public bool DyeAnyItem;
 
+		[ReloadRequired]
 		[DefaultValue(false)] 
 		public bool DyeReforges;
 
+		[ReloadRequired]
 		[DefaultValue(false)] 
 		public bool FailSaveLoad;
 
+		[ReloadRequired]
 		[DefaultValue(false)] 
 		public bool EnemyFunStuff;
 	}
@@ -61,6 +67,9 @@ namespace DyeAnything
 
 		// [DefaultValue(true)] 
 		// public bool DyeItemDyeDye;
+
+		[DefaultValue(true)] 
+		public bool DyeItemName;
 
 		[DefaultValue(true)] 
 		public bool DyeItemPrefix;

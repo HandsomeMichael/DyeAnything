@@ -409,7 +409,8 @@ namespace DyeAnything
         // only apply to weapons
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
-            return entity.damage > 0 && entity.dye <= 0;
+            bool appropriate = entity.damage > 0 || DyeServerConfig.Get.DyeAnyItem;
+            return  appropriate && entity.dye <= 0;
         }
 
         public override bool PreDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -463,6 +464,25 @@ namespace DyeAnything
             
             base.PostDrawInWorld(item, spriteBatch, lightColor, alphaColor, rotation, scale, whoAmI);
 			if (dye > 0) {spriteBatch.BeginNormal(true);}
+        }
+
+        // This might not support other tooltips as this is a global item but i will never know
+        public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset)
+        {
+            if (DyeClientConfig.Get.DyeItemName && line.Mod == "Terraria" && line.Name == "ItemName") 
+            {
+                if (DyedItem.TryGetDye(item , out int dye))
+                {
+                    Main.spriteBatch.BeginDyeShader(dye,item,true,true);
+
+                    ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, line.Font, line.Text, new Vector2(line.X, line.Y), Color.White, line.Rotation, line.Origin, line.BaseScale, line.MaxWidth, line.Spread);
+                    
+                    Main.spriteBatch.BeginNormal(true,true);
+
+                    return false;
+                }
+            }
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
     }
 

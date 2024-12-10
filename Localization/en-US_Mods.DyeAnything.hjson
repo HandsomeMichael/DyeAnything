@@ -95,6 +95,15 @@ Configs: {
 				Disable this if you want a slight increase in load time somehow
 				'''
 		}
+
+		DyeAnyItem: {
+			Label: Dye Any Item
+			Tooltip:
+				'''
+				Allow user to dye any item 
+				Previously it can only dye weapons
+				'''
+		}
 	}
 
 	DyeClientConfig: {
@@ -140,6 +149,11 @@ Configs: {
 				Dust follow its projectile dye
 				Can be disabled if you having unmatched dust color
 				'''
+		}
+
+		DyeItemName: {
+			Label: Dye Item Name
+			Tooltip: Shows how cool ur item name is
 		}
 	}
 }

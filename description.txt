@@ -21,6 +21,10 @@ Note : You can spray npcs and projectile with water gun to remove dye
 
 [ Changelog ]
 
+v.2.2
+- Fix stuff
+- Added fun stuff
+
 v2.1
 
 - Properly implemented Dye Prefixes

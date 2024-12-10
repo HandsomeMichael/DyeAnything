@@ -87,6 +87,7 @@ namespace DyeAnything.Utils
 			if (additive) {blend = BlendState.Additive;}
 			spriteBatch.Begin(SpriteSortMode.Immediate, blend, null, null, null, null, scale);
 		}
+		
         /// <summary>
 		/// spriteBatch begin but using normal sort mode and effects
 		/// </summary>
