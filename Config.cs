@@ -31,8 +31,15 @@ namespace DyeAnything
 		[DefaultValue(true)] 
 		public bool WaterRemoveNPCDye;
 
-		[DefaultValue(true)] 
+
+		[DefaultValue(false)] 
 		public bool DyeReforges;
+
+		[DefaultValue(false)] 
+		public bool FailSaveLoad;
+
+		[DefaultValue(false)] 
+		public bool EnemyFunStuff;
 	}
 
 	public class DyeClientConfig : ModConfig
@@ -43,11 +50,17 @@ namespace DyeAnything
         // save the config , this requires reflection though.
         public static void SaveConfig() => typeof(ConfigManager).GetMethod("Save", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[1] { Get });
 
+		[DefaultValue(true)] 
+		public bool ProjectileDustPatch;
+		
 		[DefaultValue(false)] 
 		public bool ItemPlayerShader;
 
-		[DefaultValue(true)] 
-		public bool DyeItemDyeDye;
+		[DefaultValue(false)] 
+		public bool OverlapItemLayer;
+
+		// [DefaultValue(true)] 
+		// public bool DyeItemDyeDye;
 
 		[DefaultValue(true)] 
 		public bool DyeItemPrefix;
