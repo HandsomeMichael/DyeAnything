@@ -17,6 +17,7 @@ namespace DyeAnything.Items
 	class ProjectileDustSupport : GlobalProjectile
 	{
 		public static int currentAI = -1;
+		// public static int current = -1;
 
         public override bool IsLoadingEnabled(Mod mod) => DyeClientConfig.Get.ProjectileDustPatch;
 
@@ -38,11 +39,15 @@ namespace DyeAnything.Items
         public override void Load()
         {
             Terraria.DataStructures.On_PlayerDrawLayers.DrawPlayer_27_HeldItem += ShittyPatch;
-			
 
 			Terraria.On_Dust.NewDust += DustPatch;
+			Terraria.On_Player.ItemCheck += ItemCheckPatch;
         }
 
+        private void ItemCheckPatch(On_Player.orig_ItemCheck orig, Player self)
+        {
+			orig(self);
+        }
 
         public override void Unload()
         {

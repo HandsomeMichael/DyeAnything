@@ -37,11 +37,15 @@ namespace DyeAnything
 
 		[ReloadRequired]
 		[DefaultValue(false)] 
-		public bool DyeReforges;
+		public bool FailSaveLoad;
 
 		[ReloadRequired]
 		[DefaultValue(false)] 
-		public bool FailSaveLoad;
+		public bool DyeReforges;
+
+		[ReloadRequired]
+		[DefaultValue("Markiplier")] 
+		public string DyeReforgeSeed;
 
 		[ReloadRequired]
 		[DefaultValue(false)] 

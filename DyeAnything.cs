@@ -127,10 +127,12 @@ namespace DyeAnything
 
         public override void PostSetupContent() 
 		{
+            // let us use algorithm so i dont have to manually put stats on dyes
+            Random randomizer = null;
 
             if (DyeServerConfig.Get.DyeReforges)
             {
-                DyeReforge.PreSetup(this);
+                ReforgeApplyItem.Get.PreSetup(randomizer);
             }
 
 			for (int i = 0; i < ItemLoader.ItemCount; i++)
@@ -153,15 +155,10 @@ namespace DyeAnything
 
                         // very very very very weird bug
 
-                        DyeReforge.LoadItem(this,item,i);
+                        ReforgeApplyItem.Get.LoadItem(randomizer,item);
                     }
 				}
 			}
-
-            if (DyeServerConfig.Get.DyeReforges)
-            {
-                DyeReforge.PostSetup(this);
-            }
 		}
 
         private int ShaderPatch(On_Main.orig_GetProjectileDesiredShader orig, Projectile proj)
